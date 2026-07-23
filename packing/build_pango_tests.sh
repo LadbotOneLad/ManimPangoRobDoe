@@ -2,7 +2,15 @@
 # build and install pango
 set -e
 
+<<<<<<< HEAD
 PANGO_VERSION=1.56.4
+=======
+PANGO_VERSION=1.50.11
+GLIB_VERSION=2.74.0
+FRIBIDI_VERSION=1.0.10
+CAIRO_VERSION=1.17.6
+HARFBUZZ_VERSION=5.3.1
+>>>>>>> upstream/main
 
 FILE_PATH=$PWD
 PREFIX="$HOME/pangoprefix"
@@ -26,6 +34,39 @@ echo "Installing Meson and Ninja"
 pip3 install -U meson ninja
 echo "::endgroup::"
 
+<<<<<<< HEAD
+=======
+echo "::group::Building and Install Glib"
+meson setup --prefix=$PREFIX --buildtype=release -Dselinux=disabled -Dlibmount=disabled glib_builddir glib
+meson compile -C glib_builddir
+meson install -C glib_builddir
+echo "::endgroup::"
+
+echo "::group::Building and Install Fribidi"
+meson setup --prefix=$PREFIX --buildtype=release fribidi_builddir fribidi
+meson compile -C fribidi_builddir
+meson install -C fribidi_builddir
+echo "::endgroup::"
+
+echo "::group::Building and Installing Cairo"
+echo "Getting patch"
+curl -L https://gitlab.freedesktop.org/cairo/cairo/-/commit/cdb7c298c7b89307ad69b94a1126221bd7c06579.patch -o test.diff
+cd cairo
+patch -Nbp1 -i "$PWD/../test.diff" || true
+# it is fine to fail because the CI config is missing.
+cd ..
+meson setup --prefix=$PREFIX --default-library=shared --buildtype=release -Dfontconfig=enabled -Dfreetype=enabled -Dglib=enabled -Dzlib=enabled -Dtee=enabled cairo_builddir cairo
+meson compile -C cairo_builddir
+meson install --no-rebuild -C cairo_builddir
+echo "::endgroup::"
+
+echo "::group::Building and Installing Harfbuzz"
+meson setup --prefix=$PREFIX -Dcoretext=enabled --buildtype=release -Dtests=disabled -Ddocs=disabled harfbuzz_builddir harfbuzz
+meson compile -C harfbuzz_builddir
+meson install -C harfbuzz_builddir
+echo "::endgroup::"
+
+>>>>>>> upstream/main
 echo "::group::Buildling and Installing Pango"
 meson setup --prefix=$PREFIX --buildtype=release \
     -Dintrospection=disabled \

@@ -147,4 +147,8 @@ cython_debug/
 
 #temp folder
 .pytest_temp
+<<<<<<< HEAD
 .venv*
+=======
+*test.py
+>>>>>>> upstream/main

@@ -1,4 +1,5 @@
 version: 2
+<<<<<<< HEAD
 build:
   os: ubuntu-22.04
 
@@ -8,6 +9,11 @@ build:
   apt_packages:
     - libpango1.0-dev
 
+=======
+formats: all
+conda:
+  environment: docs/environment.yml
+>>>>>>> upstream/main
 python:
    install:
       - requirements: docs/requirements.txt

@@ -1,5 +1,9 @@
 from cairo cimport *
 from glib cimport *
+<<<<<<< HEAD:manimpango/pango.pxd
+=======
+from pango_attributes cimport *
+>>>>>>> upstream/main:manimpango/include/pango.pxd
 
 
 cdef extern from "pango/pangocairo.h":
@@ -16,6 +20,11 @@ cdef extern from "pango/pangocairo.h":
         pass
     ctypedef struct PangoFontFamily:
         pass
+    ctypedef struct PangoRectangle:
+        int x
+        int y
+        int width
+        int height
     ctypedef enum PangoStyle:
         PANGO_STYLE_NORMAL
         PANGO_STYLE_OBLIQUE
@@ -43,6 +52,10 @@ cdef extern from "pango/pangocairo.h":
         PANGO_ALIGN_LEFT
         PANGO_ALIGN_CENTER
         PANGO_ALIGN_RIGHT
+    ctypedef struct PangoColor:
+        guint16 red
+        guint16 green
+        guint16 blue
     PangoLayout* pango_cairo_create_layout(cairo_t* cr)
     void pango_cairo_show_layout(
         cairo_t* cr,
@@ -56,6 +69,10 @@ cdef extern from "pango/pangocairo.h":
     void pango_font_description_set_size(
         PangoFontDescription* desc,
         gint size
+    )
+    void pango_font_description_set_absolute_size(
+        PangoFontDescription* desc,
+        double size
     )
     void pango_font_description_set_family(
         PangoFontDescription* desc,
@@ -73,10 +90,43 @@ cdef extern from "pango/pangocairo.h":
         PangoFontDescription* desc,
         PangoVariant variant
     )
+    char* pango_font_description_to_string(
+        const PangoFontDescription* desc
+    )
+    gboolean pango_font_description_equal(
+        const PangoFontDescription* desc1,
+        const PangoFontDescription* desc2
+    )
+    PangoFontDescription* pango_font_description_copy(
+        const PangoFontDescription* desc
+    )
+    const char* pango_font_description_get_family(
+        const PangoFontDescription* desc
+    )
+    gint pango_font_description_get_size(
+        const PangoFontDescription* desc
+    )
+    PangoStyle pango_font_description_get_style(
+        const PangoFontDescription* desc
+    )
+    PangoWeight pango_font_description_get_weight(
+        const PangoFontDescription* desc
+    )
+    PangoVariant pango_font_description_get_variant(
+        const PangoFontDescription* desc
+    )
+    PangoFontDescription* pango_font_description_from_string(
+        const char* str
+    )
+
 
     void pango_layout_set_width(
         PangoLayout* layout,
         int width
+    )
+    void pango_layout_set_height(
+        PangoLayout* layout,
+        int height
     )
     void pango_layout_set_font_description(
         PangoLayout* layout,
@@ -139,6 +189,7 @@ cdef extern from "pango/pangocairo.h":
         PangoLayout *layout,
         PangoAlignment alignment
     )
+<<<<<<< HEAD:manimpango/pango.pxd
     PangoFontMap* pango_context_get_font_map(
         PangoContext* context
     )
@@ -147,6 +198,22 @@ cdef extern from "pango/pangocairo.h":
     )
 
 
+=======
+    void pango_layout_set_attributes (
+        PangoLayout* layout,
+        PangoAttrList* attrs
+    )
+    gboolean pango_color_parse(
+        PangoColor* color,
+        const char* spec
+    )
+    void pango_layout_get_pixel_extents (
+        PangoLayout* layout,
+        PangoRectangle* ink_rect,
+        PangoRectangle* logical_rect
+    )
+
+>>>>>>> upstream/main:manimpango/include/pango.pxd
 
 cdef extern from *:
     """

@@ -44,7 +44,11 @@ MANIMPANGO_VERSION = get_version()
 MINIMUM_PANGO_VERSION = "1.30.0"
 DEBUG = False
 
+<<<<<<< HEAD
 if sys.platform == "win32" and sys.version_info >= (3, 15):
+=======
+if sys.platform == "win32" and sys.version_info >= (3, 12):
+>>>>>>> upstream/main
     import atexit
 
     atexit.register(
@@ -190,14 +194,14 @@ class PKG_CONFIG:
 def update_dict(dict1: dict, dict2: dict):
     for key in dict1:
         if key in dict2:
-            dict2[key] = dict1[key] + dict2[key]
+            dict2[key] = list(set(dict1[key] + dict2[key]))
         else:
             dict2[key] = dict1[key]
     return dict2
 
 
 ext = ".pyx" if USE_CYTHON else ".c"
-base_file = Path(__file__).parent / "manimpango"
+base_file = Path("manimpango/")
 _pkg_config_pangocairo = PKG_CONFIG("pangocairo")
 _pkg_config_fontconfig = PKG_CONFIG("pangofc")
 if _pkg_config_pangocairo.check_pkgconfig:
@@ -242,12 +246,42 @@ ext_modules = [
         [str(base_file / ("_register_font" + ext))],
         **returns,
     ),
+    Extension(
+        "manimpango.utils._utils",
+        [str(base_file / "utils" / ("utils" + ext))],
+        **returns,
+    ),
+    Extension(
+        "manimpango.fonts._font_desc",
+        [str(base_file / "fonts" / ("_font_desc" + ext))],
+        **returns,
+    ),
+    Extension(
+        "manimpango.fonts.enums",
+        [str(base_file / "fonts" / ("enums" + ext))],
+        **returns,
+    ),
+    Extension(
+        "manimpango.layout._layout",
+        [str(base_file / "layout" / ("_layout" + ext))],
+        **returns,
+    ),
+    Extension(
+        "manimpango.renderer.svg_renderer",
+        [str(base_file / "renderer" / ("svg_renderer" + ext))],
+        **returns,
+    ),
+    Extension(
+        "manimpango.renderer.image_renderer",
+        [str(base_file / "renderer" / ("image_renderer" + ext))],
+        **returns,
+    ),
 ]
 if USE_CYTHON:
     ext_modules = cythonize(
         ext_modules,
         language_level=3,
-        include_path=["manimpango"],
+        include_path=["manimpango/include"],
         gdb_debug=DEBUG,
         compiler_directives={"linetrace": coverage},
     )
@@ -265,7 +299,19 @@ setup(
     long_description=long_description,
     zip_safe=False,
     long_description_content_type="text/markdown",
+<<<<<<< HEAD
     packages=["manimpango"],
+=======
+    include_package_data=True,
+    packages=[
+        "manimpango",
+        "manimpango.attributes",
+        "manimpango.utils",
+        "manimpango.layout",
+        "manimpango.fonts",
+        "manimpango.renderer",
+    ],
+>>>>>>> upstream/main
     python_requires=">=3.8",
     platforms=["Linux", "macOS", "Windows"],
     keywords=["cython", "pango", "cairo", "manim"],
@@ -290,6 +336,6 @@ setup(
     },
     ext_modules=ext_modules,
     package_data={
-        "manimpango": ["*.pxd", "*.pyx"],
+        "manimpango": ["*.pxd", "*.pyx", "*.pyi", "*.pxi"],
     },
 )

@@ -2,7 +2,11 @@ name: Test
 
 on:
   push:
+<<<<<<< HEAD
     branches: [main, tests-build, v*]
+=======
+    branches: [main,tests-build,v*]
+>>>>>>> upstream/main
   pull_request:
     branches: [main, v*]
 
@@ -18,7 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+<<<<<<< HEAD
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+=======
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+>>>>>>> upstream/main
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -54,16 +62,34 @@ jobs:
       - name: Build Project
         run: python setup.py build_ext -i
       - name: Run Tests
+<<<<<<< HEAD
         run: pytest -s
       - uses: codecov/codecov-action@v3
         with:
           file: ./.coverage/coverage.xml
       - uses: actions/upload-artifact@v4
+=======
+        run: |
+          python setup.py build_ext -i --coverage
+          python setup.py sdist
+          pip install .
+          pytest
+      - name: Coverage
+        run: |
+          coverage report
+          coverage html
+          coverage xml
+      - uses: codecov/codecov-action@v3
+        with:
+          file: ./.coverage/coverage.xml
+      - uses: actions/upload-artifact@v3
+>>>>>>> upstream/main
         with:
           name: test-artifacts-${{matrix.os}}-${{matrix.python-version}}
           path: .pytest_temp/
 
   msvc:
+<<<<<<< HEAD
     name: ${{matrix.os}} - ${{matrix.python-version}} - ${{matrix.architecture}}
     runs-on: ${{matrix.os}}
     strategy:
@@ -80,6 +106,27 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{matrix.architecture}}
           allow-prereleases: true
+=======
+    name: ${{matrix.os}} - ${{matrix.python-version}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-2022]
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }} for x64
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: "x64"
+      - name: Cache Windows
+        id: cache-windows
+        uses: actions/cache@v3
+        with:
+          path: C:\cibw\pkg-config
+          key: ${{ hashFiles('packing/download_dlls.py') }}-${{ hashFiles('packing/build_pkgconfig.ps1') }}-1
+>>>>>>> upstream/main
       - name: Download Binary
         run: |
           python packing/download_dlls.py
@@ -98,10 +145,45 @@ jobs:
         run: python setup.py build_ext -i
       - name: Run tests
         run: |
+<<<<<<< HEAD
           pytest -s
       - uses: actions/upload-artifact@v4
         with:
           name: test-artifacts-${{matrix.os}}-${{matrix.python-version}} ${{matrix.architecture}}
+=======
+          coverage report
+          coverage html
+          coverage xml
+      - name: Set up Python ${{ matrix.python-version }} for x86
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: "x86"
+      - name: Download Binary
+        run: |
+          python packing/download_dlls.py
+      - name: Build x86 Build
+        run: |
+          $env:PATH="$env:PATH;C:\cibw\vendor\pkg-config\bin;C:\cibw\vendor\bin"
+          $env:PKG_CONFIG_PATH="C:\cibw\vendor\lib\pkgconfig"
+          pip install -r requirements-dev.txt
+          python setup.py build_ext -i --coverage
+          python setup.py sdist
+          python -m pip install dist/*
+          $env:PATH="C:\cibw\vendor\bin;$env:PATH"
+          pytest
+      - name: Coverage
+        run: |
+          coverage report
+          coverage html
+          coverage xml
+      - uses: codecov/codecov-action@v3
+        with:
+          file: ./.coverage/coverage.xml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-artifacts-${{matrix.os}}-${{matrix.python-version}}
+>>>>>>> upstream/main
           path: .pytest_temp/
   success-win:
     needs: [msvc]

@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
-import os
 import sys
 
+from . import _distributor_init  # noqa: F401
 from ._version import __version__  # noqa: F403,F401
 
-if os.name == "nt":  # pragma: no cover
-    os.environ["PATH"] = (
-        f"{os.path.abspath(os.path.dirname(__file__))}"
-        f"{os.pathsep}"
-        f"{os.environ['PATH']}"
-    )
 try:
+<<<<<<< HEAD
     from .register_font import *  # isort:skip # noqa: F403,F401
     from .cmanimpango import *  # noqa: F403,F401
     from .enums import *  # noqa: F403,F401
+=======
+    from .attributes import *  # noqa: F403,F401
+    from .cmanimpango import *  # noqa: F403,F401
+    from .enums import *  # noqa: F403,F401
+    from .fonts import *  # noqa: F403,F401
+    from .layout import *  # noqa: F403,F401
+    from .register_font import *  # noqa: F403,F401
+    from .renderer import *  # noqa: F403,F401
+>>>>>>> upstream/main
 except ImportError as ie:  # pragma: no cover
     py_ver = ".".join(map(str, sys.version_info[:3]))
     msg = f"""

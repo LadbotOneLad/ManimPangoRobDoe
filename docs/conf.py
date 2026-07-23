@@ -15,17 +15,17 @@
 # import sys
 # sys.path.insert(0, os.path.abspath(".."))
 
-
 from pathlib import Path
 
+import manimpango
+
 # -- Project information -----------------------------------------------------
-from pkg_resources import get_distribution
 
 project = "ManimPango"
-copyright = "2021, The Manim Community Dev Team"
+copyright = "2021-2023, The Manim Community Dev Team"
 author = "The Manim Community Dev Team"
 
-release = get_distribution("ManimPango").version
+release = manimpango.__version__
 version = ".".join(release.split(".")[:2])
 
 
@@ -58,7 +58,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "furo"
+html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -76,10 +76,12 @@ autoclass_content = "both"
 add_module_names = False
 
 intersphinx_mapping = {
-    "manim": ("https://docs.manim.community/en/v0.2.0", None),
+    "manim": ("https://docs.manim.community/en/stable", None),
     "python": ("https://docs.python.org/3", None),
 }
 
-ogp_image = "https://www.manim.community/logo.png"
-ogp_site_name = "Manim Pango | Documentation"
+ogp_site_name = "ManimPango | Documentation"
 ogp_site_url = "https://manimpango.manim.community/"
+ogp_social_cards = {
+    "image": "_static/logo.png",
+}

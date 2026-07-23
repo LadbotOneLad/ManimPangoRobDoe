@@ -2,11 +2,17 @@ import typing
 import warnings
 from xml.sax.saxutils import escape
 
+<<<<<<< HEAD
 from . import registered_fonts
 from .enums import Alignment
 from .utils import *
 
 include "utils.pxi"
+=======
+from .enums import Alignment
+from .utils import *
+
+>>>>>>> upstream/main
 
 class TextSetting:
     """Formatting for slices of a :class:`manim.mobject.svg.text_mobject.Text` object."""
